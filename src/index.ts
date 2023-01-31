@@ -20,10 +20,10 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (data) => {
     const user: UserData = JSON.parse(data.toString());
+    users.push(user);
     for (const id in clients) {
       clients[id].send(JSON.stringify(users));
     }
-    users.push(user);
   });
 
   ws.on('close', () => {
