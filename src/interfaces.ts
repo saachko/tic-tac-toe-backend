@@ -1,5 +1,6 @@
 import ws from 'ws';
 interface UserData {
+  id: string;
   username: string;
   room: string;
 }
