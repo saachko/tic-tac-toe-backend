@@ -1,10 +1,10 @@
 import ws from 'ws';
 import { v4 } from 'uuid';
 
-import { ClientData, UserData } from './interfaces';
+import { ClientData, UserData, UserSocketData } from './interfaces';
 
 const clients: ClientData = {};
-const users: UserData[] = [];
+let users: UserSocketData[] = [];
 
 const { Server } = ws;
 const wss = new Server(
@@ -20,13 +20,14 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (data) => {
     const user: UserData = JSON.parse(data.toString());
-    users.push(user);
+    users.push({ ...user, clientId: id });
     for (const id in clients) {
       clients[id].send(JSON.stringify(users));
     }
   });
 
   ws.on('close', () => {
+    users = users.filter((user) => user.clientId !== id);
     delete clients[id];
   });
 });

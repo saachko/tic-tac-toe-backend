@@ -5,8 +5,12 @@ interface UserData {
   room: string;
 }
 
+interface UserSocketData extends UserData {
+  clientId: string;
+}
+
 interface ClientData {
   [key: string]: ws.WebSocket;
 }
 
-export { ClientData, UserData };
+export { ClientData, UserData, UserSocketData };
