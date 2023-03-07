@@ -15,6 +15,7 @@ interface RawData {
   type: DataType;
   user: UserData;
   move: number[];
+  opponentId: string;
 }
 
 interface ClientData {

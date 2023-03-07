@@ -26,10 +26,19 @@ wss.on('connection', (ws) => {
         const user = rawData.user;
         users.push({ ...user, clientId: id });
         for (const id in clients) {
-          clients[id].send(JSON.stringify(users));
+          clients[id].send(JSON.stringify({ type: 'user', users }));
         }
         break;
       case 'move':
+        for (const id in clients) {
+          clients[id].send(
+            JSON.stringify({
+              type: 'move',
+              moves: rawData.move,
+              opponentId: rawData.opponentId,
+            })
+          );
+        }
         break;
     }
   });
