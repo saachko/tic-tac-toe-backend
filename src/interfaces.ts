@@ -1,6 +1,6 @@
 import ws from 'ws';
 
-type DataType = 'user' | 'move';
+type DataType = 'user' | 'move' | 'close';
 interface UserData {
   id: string;
   username: string;

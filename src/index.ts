@@ -45,6 +45,9 @@ wss.on('connection', (ws) => {
 
   ws.on('close', () => {
     users = users.filter((user) => user.clientId !== id);
+    for (const id in clients) {
+      clients[id].send(JSON.stringify({ type: 'close', users }));
+    }
     delete clients[id];
   });
 });
