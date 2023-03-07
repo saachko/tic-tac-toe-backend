@@ -1,7 +1,7 @@
 import ws from 'ws';
 import { v4 } from 'uuid';
 
-import { ClientData, UserData, UserSocketData } from './interfaces';
+import { ClientData, RawData, UserData, UserSocketData } from './interfaces';
 
 const clients: ClientData = {};
 let users: UserSocketData[] = [];
@@ -19,10 +19,18 @@ wss.on('connection', (ws) => {
   clients[id] = ws;
 
   ws.on('message', (data) => {
-    const user: UserData = JSON.parse(data.toString());
-    users.push({ ...user, clientId: id });
-    for (const id in clients) {
-      clients[id].send(JSON.stringify(users));
+    const rawData: RawData = JSON.parse(data.toString());
+
+    switch (rawData.type) {
+      case 'user':
+        const user = rawData.user;
+        users.push({ ...user, clientId: id });
+        for (const id in clients) {
+          clients[id].send(JSON.stringify(users));
+        }
+        break;
+      case 'move':
+        break;
     }
   });
 
